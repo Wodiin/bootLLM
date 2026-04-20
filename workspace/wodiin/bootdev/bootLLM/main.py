@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from google import genai
 import argparse
 from google.genai import types
-
+import prompts
 
 def main():
 
@@ -31,10 +31,10 @@ def main():
     generate_content(client, messages, args.verbose, args.user_prompt)
     
 
-def generate_content(client, messages, verbose, user_prompt):
+def generate_content(client, messages, verbose, user_prompt, config):
 
     # Generate content using the Gemini API
-    response = client.models.generate_content(model="gemini-2.5-flash", contents=messages)
+    response = client.models.generate_content(model="gemini-2.5-flash", contents=messages, config=types.GenerateContentConfig(system_instruction=prompts.system_prompt))
     
     # Check if the response contains usage metadata and print token counts
     if response.usage_metadata != None:
