@@ -1,4 +1,5 @@
 import os
+import google.genai.types as types
 
 def get_files_info(working_directory, directory="."):
     
@@ -31,8 +32,23 @@ def get_files_info(working_directory, directory="."):
             is_item_directory = os.path.isdir(item_path)
             lines.append(f"- {filename}: file_size={item_size} bytes, is_dir={is_item_directory}")
         return "\n".join(lines)
-    
+
     # Handle any exceptions that may occur during the process and return an error message
     except Exception as e:
             return f"Error: {str(e)}"
-    
+
+
+# Define the function schema for get_files_info to be used in the Gemini API
+schema_get_files_info = types.FunctionDeclaration(
+    name="get_files_info",
+    description="Lists files in a specified directory relative to the working directory, providing file size and directory status",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "directory": types.Schema(
+                type=types.Type.STRING,
+                description="Directory path to list files from, relative to the working directory (default is the working directory itself)",
+                ),
+            },
+        ),
+    )
